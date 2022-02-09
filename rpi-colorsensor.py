@@ -81,7 +81,7 @@ class Color:
         self.blue = blue
 
 class RawColor:
-    def __init__(self, red: float, green: float, blue: float, ir: float):
+    def __init__(self, red: int, green: int, blue: int, ir: int):
         self.red = red
         self.green = green
         self.blue = blue
