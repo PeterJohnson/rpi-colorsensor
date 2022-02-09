@@ -93,8 +93,9 @@ class CIEColor:
         self.y = y
         self.z = z
 
-"""REV Robotics Color Sensor V3"""
 class ColorSensorV3:
+    """REV Robotics Color Sensor V3"""
+
     kAddress = 0x52
     kPartID = 0xC2
 
