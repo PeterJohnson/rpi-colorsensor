@@ -45,8 +45,8 @@ This program shows how to operate a single device on bus 1 and two devices
 
 For information on how the GPIO numbers map to the Raspberry Pi pins, see [I2C at Raspberry Pi GPIO Pinout](https://pinout.xyz/pinout/i2c).
 
-The 4-pin sensor cable is GND, 3.3V, SCL, and SDA. So to wire it to the Raspberry Pi I2C bus 1, connect:
+The 4-pin sensor cable is GND, 3.3V, SDA, and SCL. So to wire it to the Raspberry Pi I2C bus 1, connect:
 - GND (black) to Pin 6
 - 3.3V (red) to Pin 1
-- SCL (white) to Pin 5
-- SDA (blue) to Pin 3
+- SDA (white) to Pin 3
+- SCL (blue) to Pin 5
