@@ -74,24 +74,31 @@ import sys
 
 pi = pigpio.pi()
 
+
 class Color:
+
     def __init__(self, red: float, green: float, blue: float):
         self.red = red
         self.green = green
         self.blue = blue
 
+
 class RawColor:
+
     def __init__(self, red: int, green: int, blue: int, ir: int):
         self.red = red
         self.green = green
         self.blue = blue
         self.ir = ir
 
+
 class CIEColor:
+
     def __init__(self, x: float, y: float, z: float):
         self.x = x
         self.y = y
         self.z = z
+
 
 class ColorSensorV3:
     """REV Robotics Color Sensor V3"""
@@ -193,8 +200,7 @@ class ColorSensorV3:
         kColorRate2000ms = 7
 
     def configureProximitySensorLED(self, freq: LEDPulseFrequency,
-                                            curr: LEDCurrent,
-                                            pulses: int):
+                                    curr: LEDCurrent, pulses: int):
         """
         Configure the the IR LED used by the proximity sensor.
 
@@ -213,7 +219,7 @@ class ColorSensorV3:
         self._write8(self.Register.kProximitySensorPulses, pulses)
 
     def configureProximitySensor(self, res: ProximitySensorResolution,
-                                         rate: ProximitySensorMeasurementRate):
+                                 rate: ProximitySensorMeasurementRate):
         """
         Configure the proximity sensor.
 
@@ -228,8 +234,8 @@ class ColorSensorV3:
         self._write8(self.Register.kProximitySensorRate, res | rate)
 
     def configureColorSensor(self, res: ColorSensorResolution,
-                                     rate: ColorSensorMeasurementRate,
-                                     gain: GainFactor):
+                             rate: ColorSensorMeasurementRate,
+                             gain: GainFactor):
         """
         Configure the color sensor.
 
@@ -275,7 +281,8 @@ class ColorSensorV3:
 
         Returns Color containing red, green, blue and IR values
         """
-        return RawColor(self.getRed(), self.getGreen(), self.getBlue(), self.getIR())
+        return RawColor(self.getRed(), self.getGreen(), self.getBlue(),
+                        self.getIR())
 
     def getRed(self) -> int:
         """
@@ -312,9 +319,8 @@ class ColorSensorV3:
     # This is a transformation matrix given by the chip
     # manufacturer to transform the raw RGB to CIE XYZ
     _Cmatrix = [
-        0.048112847, 0.289453437, -0.084950826,
-       -0.030754752, 0.339680186, -0.071569905,
-       -0.093947499, 0.072838494,  0.34024948
+        0.048112847, 0.289453437, -0.084950826, -0.030754752, 0.339680186,
+        -0.071569905, -0.093947499, 0.072838494, 0.34024948
     ]
 
     def getCIEColor(self) -> CIEColor:
@@ -327,9 +333,12 @@ class ColorSensorV3:
         Returns CIEColor value from sensor
         """
         raw = self.getRawColor()
-        return CIEColor(self._Cmatrix[0] * raw.red + self._Cmatrix[1] * raw.green + self._Cmatrix[2] * raw.blue,
-                        self._Cmatrix[3] * raw.red + self._Cmatrix[4] * raw.green + self._Cmatrix[5] * raw.blue,
-                        self._Cmatrix[6] * raw.red + self._Cmatrix[7] * raw.green + self._Cmatrix[8] * raw.blue)
+        return CIEColor(
+            self._Cmatrix[0] * raw.red + self._Cmatrix[1] * raw.green +
+            self._Cmatrix[2] * raw.blue, self._Cmatrix[3] * raw.red +
+            self._Cmatrix[4] * raw.green + self._Cmatrix[5] * raw.blue,
+            self._Cmatrix[6] * raw.red + self._Cmatrix[7] * raw.green +
+            self._Cmatrix[8] * raw.blue)
 
     def hasReset(self) -> bool:
         """
@@ -352,18 +361,20 @@ class ColorSensorV3:
         raw = pi.i2c_read_byte_data(self.i2c, self.Register.kPartID)
 
         if self.kPartID != raw:
-            print("Unknown device found with same I2C addres as REV color sensor")
+            print(
+                "Unknown device found with same I2C addres as REV color sensor")
             return False
 
         return True
 
     def _initializeDevice(self):
-        self._write8(self.Register.kMainCtrl,
-            self.MainControl.kRGBMode |
-            self.MainControl.kLightSensorEnable |
+        self._write8(
+            self.Register.kMainCtrl,
+            self.MainControl.kRGBMode | self.MainControl.kLightSensorEnable |
             self.MainControl.kProximitySensorEnable)
 
-        self._write8(self.Register.kProximitySensorRate,
+        self._write8(
+            self.Register.kProximitySensorRate,
             self.ProximitySensorResolution.kProxRes11bit |
             self.ProximitySensorMeasurementRate.kProxRate100ms)
 
@@ -407,7 +418,8 @@ def readConfig():
         with open(configFile, "rt", encoding="utf-8") as f:
             j = json.load(f)
     except OSError as err:
-        print("could not open '{}': {}".format(configFile, err), file=sys.stderr)
+        print("could not open '{}': {}".format(configFile, err),
+              file=sys.stderr)
         return False
 
     # top level must be an object
@@ -469,7 +481,8 @@ if __name__ == "__main__":
         # read sensor and send to NT
         rawcolor = sensor1.getRawColor()
         prox = sensor1.getProximity()
-        colorEntry1.setDoubleArray([rawcolor.red, rawcolor.green, rawcolor.blue, rawcolor.ir])
+        colorEntry1.setDoubleArray(
+            [rawcolor.red, rawcolor.green, rawcolor.blue, rawcolor.ir])
         proxEntry1.setDouble(prox)
 
         # flush NT
