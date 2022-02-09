@@ -7,9 +7,9 @@ Raspberry Pi that has RobotPy networktables installed.
 
 Setting up the rPi:
 - ssh in (username pi, password raspberry), then:
-  - run "rw" to put the Pi into writable mode
+  - run ``rw`` to put the Pi into writable mode
   - run ``sudo systemctl enable pigpiod``
-  - run ``sudo raspi-config``, Interface Options, I2C, Yes, OR:
+  - run ``sudo raspi-config``, Interface Options, I2C, Yes, **OR**:
     - edit /etc/modules, add ``i2c-dev`` line
     - edit /boot/config.txt:
       - uncomment ``dtparam=i2c_arm=on`` line
