@@ -14,6 +14,17 @@ Setting up the rPi:
     - edit /boot/config.txt:
       - uncomment ``dtparam=i2c_arm=on`` line
 
+To configure to run automatically as a service (after testing manually):
+  - run ``sudo mkdir -p /service/colorsensor``
+  - create a /service/colorsensor/run file with the following contents:
+```
+#!/bin/sh
+exec /home/pi/rpi-colorsensor.py
+```
+  - run ``sudo chmod a+x /service/colorsensor/run``
+  - run ``sudo ln -s /tmp/colorsensor-supervise /service/colorsensor/supervise``
+  - run ``sudo ln -s /service/colorsensor /etc/service/colorsensor``
+
 The default hardware I2C bus is bus 1 on GPIO 2 (Data) and GPIO 3 (Clock).
 These pins include 1.8k pull-up resistors to 3.3V.
 
